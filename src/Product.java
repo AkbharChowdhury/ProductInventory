@@ -9,16 +9,13 @@ public record Product (String name, double price) {
     public static void printOrder(List<OrderItem> items) {
         System.out.println(sep() + " order summary ".toUpperCase(Locale.ROOT) + sep());
         items.forEach(Product::showInvoice);
-
-        var total = items.stream().reduce(0.0, (res, prod) -> res + calcPrice(prod.qty(), prod.product().price), Double::sum);
-        System.out.println(STR."total cost is \{formatMoney(total)}");
+        var total = items.stream().reduce(0.0, (res, i) -> res + calcPrice(i.qty(), i.product().price), Double::sum);
+        System.out.println(STR."Total cost is \{NumberFormat.getCurrencyInstance(Locale.UK).format(total)}");
 
 
     }
 
-    private static String formatMoney(double amount) {
-        return NumberFormat.getCurrencyInstance(Locale.UK).format(amount);
-    }
+
 
     private static double calcPrice(int qty, double price) {
         return qty * price;
